@@ -11,17 +11,18 @@ import json
 #default command: python feedingGrounds.py --whole_day 1 --ml_type comp
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--add_data", required=False, help="Enter filename to a json file with a dictionary containing a key called times and a value that is an array with new times to add to the dataset. Make sure json file is in same directory as feedingGrounds.py")
+parser.add_argument("--training_data", default='data.json')
+parser.add_argument("--add_data", required=False, help="Enter filename to a json file with a dictionary containing a key called times and a value that is an array with new times to add to the dataset. Will rewrite data.json to new dataset. Make sure json file is in same directory as feedingGrounds.py")
 parser.add_argument("--val_time", required=False, type=int, help="Enter a time to predict feeding for. also use the --val_prec to add the number of preceeding feedings there were")
 parser.add_argument("--val_prec", required=False, type=int, help="Enter the number of preceeding feedings there were")
 parser.add_argument("--whole_day", default=0, type=int, help="Options: {0,1}. Enter '1' if you want to generate values for the whole day. Enter '0' for only the entered time. Default is '0.'")
 parser.add_argument("--ml_type", default='lin', type=str, help="Options: {'lin', 'grad', 'comp'}. Enter 'grad' to run a gradient regression instead of a linear regression. 'lin' is the default. 'comp' compares the output of lin and grad and outputs the best value")
 args = parser.parse_args()
 
-f = open("data.json", "r")
+f = open(args.training_data, "r")
 final = json.load(f)
 f.close()
-f = open("data.json", "w+")
+f = open(args.training_data, "w+")
 
 def addNewData(newData):
 	global final
